@@ -1,0 +1,2 @@
+This app involved various python libraries and utilization of the streamlit installation. The app uses a penguins dataset, and serves as practice using various insteractive streamlit tools, especially using them together with seaborn and matplotlib functions. The data visualizations focus primarily on body mass distinctions betweem penguins of different sexes, islands, and species. It also indicates the correlations between flipper length and bill length with body mass.
+Link to app: http://10.24.254.244:8507 
