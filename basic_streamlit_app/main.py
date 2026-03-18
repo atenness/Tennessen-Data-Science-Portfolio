@@ -122,3 +122,5 @@ elif sex_plot == "Female size vs Species":
 if st.button("Click Here to Finish!"):
     st.write("Congrats! You have explored the Palmer's Penguins dataset!")
 else: st.write("Click the button to conclude.")
+
+# to run streamlit app: type the command, "streamlit run basic_streamlit_app/main.py" into a fresh terminal, once you have saved the code. 
