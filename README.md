@@ -1,7 +1,36 @@
-# Data Science Portfolio
+# Data Science Portfolio – Gus Tennessen
 
--This repository contains my projects for my introductory data science class at the University of Notre Dame. 
+## Overview
+This repository contains a collection of data science projects demonstrating skills in data analysis, visualization, regression analysis, and application development.
 
--Folders labeled "Week __" indicate in-class coding practice, where I learn new tools and methods.
+## Projects
 
--The first major project is the Basic_streamlit_app, in which I explored data visualization with Streamlit. 
+### 1. Streamlit App
+**Description:** One sentence explaining what it does.
+
+**Tools:** Python, Streamlit, Pandas, etc.
+
+**Key Features:**
+- Feature 1
+- Feature 2
+
+**Location:** `basic_streamlit_app/`
+
+### 2. Tidy Data Project
+**Description:** One sentence explaining what it does.
+
+**Tools:** Python, Streamlit, Pandas, etc.
+
+**Key Features:**
+- Feature 1
+- Feature 2
+---
+
+## Skills Demonstrated
+- Data visualization
+- Statistical analysis
+- Interactive app development
+- Linear Regression
+
+## How to Use
+Each project is contained in its own folder with instructions.
