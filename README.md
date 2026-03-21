@@ -27,8 +27,7 @@ This repository contains a collection of data science projects demonstrating ski
 - Bar charts for gender comparison and medal count
 - Pivot table for analyzing medal counts by gender and sport
 
-**Location:** `TidyData-Project/` 
----
+**Location:** `TidyData-Project/`
 
 ## Skills Demonstrated
 - Data visualization
