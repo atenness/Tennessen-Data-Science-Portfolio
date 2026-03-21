@@ -6,6 +6,9 @@ This repository contains a collection of data science projects demonstrating ski
 ## Projects
 
 ### 1. Streamlit App
+
+[View the Project](https://github.com/atenness/Tennessen-Data-Science-Portfolio/tree/main/basic_streamlit_app)
+
 **Description:** This project is an interactive Streamlit application that explores the Palmer Penguins dataset through dynamic visualizations. Users can analyze how physical characteristics like body mass, flipper length, and bill length vary across species, sex, and island.
 
 **Tools:** Python, Streamlit, Pandas, etc.
@@ -19,7 +22,12 @@ This repository contains a collection of data science projects demonstrating ski
 **Location:** `basic_streamlit_app/`
 
 ### 2. Tidy Data Project
+
+[View the Project](https://github.com/atenness/Tennessen-Data-Science-Portfolio/tree/main/TidyData-Project)
+
 **Description:** This project demonstrates the process of cleaning, transforming, and analyzing a real-world dataset using tidy data principles. The dataset contains information on Olympic medalists from the 2008 Beijing Olympics, organized in a wide, unstructured format.
+
+This project strengthens my data wrangling and processing skills, which are essential for any data science workflow. It complements my portfolio by demonstrating my ability to take messy, real-world data and prepare it for analysis and visualization. 
 
 **Tools:** Python, Pandas, Seaborn, Matplotlib.
 
