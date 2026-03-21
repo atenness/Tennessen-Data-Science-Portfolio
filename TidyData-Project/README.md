@@ -56,3 +56,7 @@ These visualizations were created using:
 - Matplotlib
 - Seaborn
 - Jupyter Notebook
+
+## Links to References: 
+- Pandas Cheat Sheet: https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf
+- Tidy Data Principles: https://vita.had.co.nz/papers/tidy-data.pdf 
