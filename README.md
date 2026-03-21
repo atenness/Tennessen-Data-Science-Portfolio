@@ -6,24 +6,28 @@ This repository contains a collection of data science projects demonstrating ski
 ## Projects
 
 ### 1. Streamlit App
-**Description:** One sentence explaining what it does.
+**Description:** This project is an interactive Streamlit application that explores the Palmer Penguins dataset through dynamic visualizations. Users can analyze how physical characteristics like body mass, flipper length, and bill length vary across species, sex, and island.
 
 **Tools:** Python, Streamlit, Pandas, etc.
 
 **Key Features:**
-- Feature 1
-- Feature 2
+- Interactive filtering by species, sex, island, etc. 
+- Scatterplots showing relationships between:
+    - Flipper length and body mass
+    - Bill length and body mass
 
 **Location:** `basic_streamlit_app/`
 
 ### 2. Tidy Data Project
-**Description:** One sentence explaining what it does.
+**Description:** This project demonstrates the process of cleaning, transforming, and analyzing a real-world dataset using tidy data principles. The dataset contains information on Olympic medalists from the 2008 Beijing Olympics, organized in a wide, unstructured format.
 
-**Tools:** Python, Streamlit, Pandas, etc.
+**Tools:** Python, Pandas, Seaborn, Matplotlib.
 
 **Key Features:**
-- Feature 1
-- Feature 2
+- Bar charts for gender comparison and medal count
+- Pivot table for analyzing medal counts by gender and sport
+
+**Location:** `TidyData-Project/` 
 ---
 
 ## Skills Demonstrated
