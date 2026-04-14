@@ -40,9 +40,12 @@ st.write(
 #Allow for user to upload their own dataset:
 chosen_file = st.file_uploader("Upload a CSV file", type = ["csv"])
 #Tell streamlit to save the result, so as not to reload dataset every time:
+from pathlib import Path
+
 @st.cache_data
 def load_sample_data():
-    return pd.read_csv("sample_data/Iris.csv")
+    file_path = Path(__file__).parent / "sample_data" / "Iris.csv"
+    return pd.read_csv(file_path)
 
 use_sample = st.checkbox("Use sample Iris dataset instead")
 df = None
