@@ -7,7 +7,7 @@ st.title("Palmer's Penguins Dataset Exploration")
 st.write("This app is an exploration of the Penguin's dataset, exploring streamlit's data visualization and interactive tools.")
 
 #loading the dataset
-df = pd.read_csv("data/penguins.csv")
+df = pd.read_csv("basic_streamlit_app/data/penguins.csv")
 
 st.subheader("Exploring the Dataset")
 #Displaying data: 
