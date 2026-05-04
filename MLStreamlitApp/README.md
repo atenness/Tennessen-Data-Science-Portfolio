@@ -69,8 +69,8 @@ https://tennessen-data-science-portfolio-ml.streamlit.app/
 The app uses a scikit-learn pipeline to automatically handle:
 
 - Missing values:
-  - Numerical → mean imputation  
-  - Categorical → most frequent value  
+  - Numerical: mean imputation  
+  - Categorical: most frequent value  
 
 - Feature scaling:
   - Standardization for numeric features  
@@ -96,9 +96,9 @@ Additional outputs:
 
 ## Model Interpretation
 
-- Logistic Regression → Displays feature coefficients  
-- Decision Tree → Visual tree diagram  
-- KNN → Displays chosen value of k and explanation  
+- Logistic Regression: Displays feature coefficients  
+- Decision Tree: Visual tree diagram  
+- KNN: Displays chosen value of k and explanation  
 
 ## References
 
