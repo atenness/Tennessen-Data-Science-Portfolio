@@ -12,7 +12,7 @@ This project is an interactive Streamlit application that explores the Palmer Pe
 - Real-time updates based on user input
 
 ## Demo
-Live app: http://10.24.254.24:8507
+Deployed app: [http://10.24.254.24:8507](https://mainpy-jw8kywquj3vnwyqqj3gyyp.streamlit.app/)
 
 ## Technologies Used
 - Python
