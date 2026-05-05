@@ -11,7 +11,7 @@ The goal is to understand how unsupervised ML models change with different param
 git clone https://github.com/atenness/Tennessen-Data-Science-Portfolio/blob/main/MLUnsupervised_app/main.py 
 
 ### 2. Install the Required Libraries
-Male sure Python 3.9+ is installed then run: pip install -r requirements.txt
+Male sure Python 3.9+ is installed then run: `pip install -r requirements.txt`
 
 ### 3. Run the App
 In the terminal, run: `streamlit run main.py`

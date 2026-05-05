@@ -15,7 +15,7 @@ The dataset includes Olympic medalists categorized by sport and gender, with var
 The dataset was transformed by:
 
 1. **Reshaping (Wide to Long Format)**  
-   - Used "pandas.melt()" to convert the dataset into a long format.
+   - Used `pandas.melt()` to convert the dataset into a long format.
 
 2. **Splitting Variables**  
    - Applied "str.split()" to separate combined column names into two variables:

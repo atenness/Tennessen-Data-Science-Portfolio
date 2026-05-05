@@ -12,10 +12,10 @@ git clone https://github.com/atenness/Tennessen-Data-Science-Portfolio/blob/main
 
 ### 2. Install Required Libraries
 Make sure you have Python 3.9+ installed, then run:  
-pip install -r requirements.txt  
+`pip install -r requirements.txt` 
 
 ### 3. Run the App
-streamlit run app.py  
+`streamlit run app.py` 
 
 ### 4. Open in Browser
 The app will automatically open at:  

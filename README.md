@@ -61,11 +61,36 @@ The key development for this project was designing a full preprocessing and mode
 
 **Location:** `MLStreamlitApp`
 
+### 4. Unsupervised Machine Learning Web App
+
+[View the Project](https://github.com/atenness/Tennessen-Data-Science-Portfolio/tree/main/MLUnsupervised_app)
+
+**Description:** This ia an interactive unsupervised machine learnign app using Streamlit. Users can upload a dataset and select whichever numeric features they want for analysis. After selecting from three different unsupervised ML models, they can tune hyperparameters and evaluate performance. 
+
+This was a very important app for my coding development. After learning how to design a full preprocessing and modeling pipeline with machine learning, this was key for being able to interpret data structures for real world analysis. There was also more of a focus on interprtability, through understanding of silhouette scores, elbow plots, and PCA variance. I extended beyond just generating results, to actually explaining them with this app. 
+
+**Key Features:**
+- Upload custom datasets or use a built-in sample dataset
+- Select from multiple supervised learning models:
+  - K-Means
+  - Hierarchical Clustering
+  - Principal Component Analysis
+- Interactive hyperparameter tuning via UI sliders
+- Automated preprocessing pipeline
+- Model evaluation with:
+  - Silhouette scores, cluster visualization, elbow plots, total variances. 
+- Model interpretability
+
+**Tools & Technologies:** Python, Streamlit, Scikit-learn, Pandas, NumPy, Matplotlib  
+
+**Location:** `MLStreamlitApp`
+
 ## Skills Demonstrated
 - Data visualization
 - Statistical analysis
 - Interactive app development
-- Machine Learning:
+- Machine Learning: Supervised and Unsupervised
+- Model interpretation
 
 ## How to Use
 Each project is contained in its own folder with instructions.
