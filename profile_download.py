@@ -14,6 +14,8 @@ import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
 
+from io import BytesIO
+
 
 APP_DIR = Path(__file__).resolve().parent
 SETTINGS_DIR = Path.home() / ".leo_linkedin_download_dashboard"
@@ -299,12 +301,26 @@ def project_sort_key(project: dict[str, object]) -> str:
 
 
 @st.cache_data(show_spinner=False)
-def load_first_workbook_sheet(path_text: str, modified_ns: int) -> tuple[str, pd.DataFrame]:
-    del modified_ns
-    excel = pd.ExcelFile(path_text)
+def load_first_workbook_sheet(
+    file_bytes: bytes,
+    file_name: str,
+) -> tuple[str, pd.DataFrame]:
+    workbook = BytesIO(file_bytes)
+
+    excel = pd.ExcelFile(workbook)
     sheet_name = excel.sheet_names[0]
-    df = pd.read_excel(path_text, sheet_name=sheet_name, dtype=str, keep_default_na=False)
+
+    workbook.seek(0)
+
+    df = pd.read_excel(
+        workbook,
+        sheet_name=sheet_name,
+        dtype=str,
+        keep_default_na=False,
+    )
+
     df.columns = df.columns.astype(str)
+
     return sheet_name, df
 
 
@@ -935,20 +951,32 @@ def go_to_previous_participant(
 
 
 def go_to_next_participant(
-    projects: dict[str, dict[str, object]],
-    project: dict[str, object],
     row_index: int,
     review_log: pd.DataFrame,
-    review_log_path: Path,
 ) -> None:
-    started_at = float(st.session_state.get("participant_started_at", time.time()))
-    updated_log = mark_participant_downloaded(review_log, row_index, time.time() - started_at)
-    write_review_log(review_log_path, updated_log)
-    completed_count, participant_total, _ = participant_progress(updated_log)
-    next_index = min(row_index + 1, max(0, participant_total - 1))
+    started_at = float(
+        st.session_state.get("participant_started_at", time.time())
+    )
+
+    elapsed_seconds = time.time() - started_at
+
+    updated_log = mark_participant_downloaded(
+        review_log,
+        row_index,
+        elapsed_seconds,
+    )
+
+    st.session_state["review_log"] = updated_log
+
+    _, participant_total, _ = participant_progress(updated_log)
+
+    next_index = min(
+        row_index + 1,
+        max(0, participant_total - 1),
+    )
+
     st.session_state["download_row_index"] = next_index
     st.session_state.pop("participant_timer_key", None)
-    save_project_state(projects, project, next_index, completed_count, participant_total)
 
 
 def render_bottom_progress(completed: int, total: int) -> None:
@@ -1000,16 +1028,14 @@ with st.sidebar:
     if st.button("Projects", use_container_width=True):
         st.session_state["download_view"] = "launch"
         st.rerun()
+
     st.divider()
-    workbook_path_text = st.text_input(
-        "Enter Excel file path",
-        placeholder=r"G:\SecureProjectFolder\candidate_links.xlsx",
-        key="download_links_path_input",
-    )
-    review_log_path_text = st.text_input(
-        "Enter review log path",
-        placeholder=str(APP_DIR / DEFAULT_LOG_NAME),
-        key="download_review_log_path_input",
+
+    uploaded_workbook = st.file_uploader(
+        "Upload Excel workbook",
+        type=["xlsx", "xls"],
+        accept_multiple_files=False,
+        help="Drag and drop an Excel workbook here.",
     )
 
 workbook_df: pd.DataFrame | None = None
@@ -1017,24 +1043,26 @@ workbook_error = ""
 selected_sheet = ""
 workbook_source = ""
 
-if workbook_path_text.strip():
-    workbook_path = clean_path(workbook_path_text)
-    if is_inside_app_dir(workbook_path):
-        st.sidebar.warning("Project-folder workbooks should be fake/sample data only.")
-    if not workbook_path.exists():
-        workbook_error = "Workbook file not found."
-    elif not workbook_path.is_file():
-        workbook_error = "Workbook path is not a file."
-    else:
-        try:
-            resolved_path = workbook_path.resolve(strict=False)
-            modified_ns = resolved_path.stat().st_mtime_ns
-            selected_sheet, workbook_df = load_first_workbook_sheet(str(resolved_path), modified_ns)
-            workbook_source = str(resolved_path)
-        except Exception as exc:
-            workbook_error = f"Could not load workbook: {exc}"
+if uploaded_workbook is not None:
+    try:
+        file_bytes = uploaded_workbook.getvalue()
 
-project_name = project_name_from_path(workbook_path_text)
+        selected_sheet, workbook_df = load_first_workbook_sheet(
+            file_bytes,
+            uploaded_workbook.name,
+        )
+
+        workbook_source = uploaded_workbook.name
+
+    except Exception as exc:
+        workbook_error = f"Could not load workbook: {exc}"
+
+project_name = (
+    project_name_from_path(uploaded_workbook.name)
+    if uploaded_workbook is not None
+    else "Project"
+)
+
 render_header(project_name)
 
 if workbook_error:
@@ -1042,7 +1070,7 @@ if workbook_error:
     st.stop()
 
 if workbook_df is None:
-    st.info("Enter an Excel file path in the sidebar.")
+    st.info("Upload an Excel workbook in the sidebar.")
     st.stop()
 
 if workbook_df.empty:
@@ -1063,20 +1091,30 @@ with st.sidebar:
 
 link_columns = detected_link_columns(columns)[:3]
 study_ids = study_ids_from_df(workbook_df, study_id_column)
-review_log_path = clean_path(review_log_path_text) if review_log_path_text.strip() else default_review_log_path(workbook_source)
-review_log_path = review_log_path.resolve(strict=False)
 
-try:
-    review_log = read_review_log(review_log_path, study_ids)
-    write_review_log(review_log_path, review_log)
-except Exception as exc:
-    st.error(f"Could not read or create the review log: {exc}")
-    st.stop()
+log_signature = (
+    f"{workbook_source}|{study_id_column}|"
+    f"{len(workbook_df)}|{'|'.join(study_ids)}"
+)
 
-log_signature = f"{workbook_source}|{review_log_path}|{study_id_column}|{len(workbook_df)}"
 if st.session_state.get("download_log_signature") != log_signature:
     st.session_state["download_log_signature"] = log_signature
-    st.session_state["download_row_index"] = first_pending_index(review_log)
+
+    st.session_state["review_log"] = pd.DataFrame(
+        {
+            "Study ID": study_ids,
+            "Time": [0.0] * len(study_ids),
+            "Downloaded": ["No"] * len(study_ids),
+        }
+    )
+
+    st.session_state["download_row_index"] = 0
+    st.session_state.pop("participant_timer_key", None)
+
+review_log = st.session_state["review_log"]
+review_log_name = (
+    f"{Path(uploaded_workbook.name).stem}_download_review_log.csv"
+)
 
 row_index = max(0, min(int(st.session_state.get("download_row_index", 0)), len(workbook_df) - 1))
 st.session_state["download_row_index"] = row_index
@@ -1085,7 +1123,7 @@ completed_count, participant_total, _ = participant_progress(review_log)
 project = ensure_project(
     projects=projects,
     workbook_path=workbook_source,
-    review_log_path=str(review_log_path),
+    review_log_path="",
     study_id_column=study_id_column,
     downloaded_participants=completed_count,
     total_participants=participant_total,
@@ -1094,7 +1132,7 @@ project = ensure_project(
 
 row = workbook_df.iloc[row_index]
 study_id = cell_text(row.get(study_id_column, "")) or study_ids[row_index]
-timer_key = f"{review_log_path}|{study_id}|{row_index}"
+timer_key = f"{workbook_source}|{study_id}|{row_index}"
 if st.session_state.get("participant_timer_key") != timer_key:
     st.session_state["participant_timer_key"] = timer_key
     st.session_state["participant_started_at"] = time.time()
@@ -1115,7 +1153,7 @@ with nav_next:
         type="primary",
         use_container_width=True,
         on_click=go_to_next_participant,
-        args=(projects, project, row_index, review_log, review_log_path),
+        args=(row_index, review_log),
     )
 with nav_count:
     st.markdown(
@@ -1153,5 +1191,18 @@ for offset in range(3):
                 f"Copy File Name #{offset + 1}",
                 f"{row_index}-missing-link-{offset + 1}",
             )
+
+review_log = st.session_state["review_log"]
+completed_count, participant_total, _ = participant_progress(review_log)
+
+review_log_csv = review_log.to_csv(index=False).encode("utf-8")
+
+st.download_button(
+    label="Download Review Log",
+    data=review_log_csv,
+    file_name=review_log_name,
+    mime="text/csv",
+    use_container_width=True,
+)
 
 render_bottom_progress(completed_count, participant_total)
