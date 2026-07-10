@@ -949,6 +949,9 @@ def go_to_previous_participant(
     st.session_state.pop("participant_timer_key", None)
     save_project_state(projects, project, previous_index, completed_count, participant_total)
 
+def go_to_previous_participant(row_index: int) -> None: 
+    st.session_state["download_row_index"] = max(0, row_index - 1) 
+    st.session_state.pop("participant_timer_key", None)
 
 def go_to_next_participant(
     row_index: int,
@@ -1120,15 +1123,15 @@ row_index = max(0, min(int(st.session_state.get("download_row_index", 0)), len(w
 st.session_state["download_row_index"] = row_index
 completed_count, participant_total, _ = participant_progress(review_log)
 
-project = ensure_project(
-    projects=projects,
-    workbook_path=workbook_source,
-    review_log_path="",
-    study_id_column=study_id_column,
-    downloaded_participants=completed_count,
-    total_participants=participant_total,
-    row_index=row_index,
-)
+#project = ensure_project(
+#    projects=projects,
+#    workbook_path=workbook_source,
+#    review_log_path="",
+#    study_id_column=study_id_column,
+#    downloaded_participants=completed_count,
+#    total_participants=participant_total,
+#    row_index=row_index,
+#)
 
 row = workbook_df.iloc[row_index]
 study_id = cell_text(row.get(study_id_column, "")) or study_ids[row_index]
@@ -1144,10 +1147,16 @@ with nav_prev:
         disabled=row_index <= 0,
         use_container_width=True,
         on_click=go_to_previous_participant,
-        args=(projects, project, row_index, completed_count, participant_total),
+        args=(row_index,),
     )
+
 with nav_next:
-    next_label = "Finish" if row_index >= len(workbook_df) - 1 else "Next"
+    next_label = (
+        "Finish"
+        if row_index >= len(workbook_df) - 1
+        else "Next"
+    )
+
     st.button(
         next_label,
         type="primary",
@@ -1155,14 +1164,21 @@ with nav_next:
         on_click=go_to_next_participant,
         args=(row_index, review_log),
     )
+
 with nav_count:
     st.markdown(
         f"""
         <div class="participant-title">{html.escape(study_id or "Missing study ID")}</div>
-        <div class="participant-count">Participant {row_index + 1} of {len(workbook_df)}</div>
+        <div class="participant-count">
+            Participant {row_index + 1} of {len(workbook_df)}
+        </div>
         """,
         unsafe_allow_html=True,
     )
+
+# Refresh the local variables after button callbacks
+review_log = st.session_state["review_log"]
+completed_count, participant_total, _ = participant_progress(review_log)
 
 if not link_columns:
     st.warning("No link fields were detected in the workbook's first sheet.")
